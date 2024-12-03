@@ -9,3 +9,5 @@ app.use('/postagem', postagemRoutes)
 
 app.listen(3000, ()=> console.log("SERVIDOR RODANDO"))
 
+console.log("Teste")
+

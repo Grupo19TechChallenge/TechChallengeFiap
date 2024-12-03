@@ -1,24 +1,28 @@
 
 services:
   db_postgres:
-    container_name: app-escola-postgres
+    container_name: app-escola-db
     image: postgres:14.15-alpine
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: app-escola
-    volumes:
-      - /app-escola/src/database/postgres
+    volumes: 
+      - db_postgres:/var/lib/postgres
     ports: 
       - "5432:5432"
 
   node:
+    build: .
     depends_on:
-      - postgres
+      - db_postgres
     container_name: app-escola-node
-    image: node:20.18.1-alpine3.19
     volumes:
-      - /app-escola/src
+      - .:/src/
     ports: 
       - "3000:3000"
+
+volumes:
+    db_postgres:
+    node:
