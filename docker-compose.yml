@@ -1,7 +1,7 @@
 
 services:
   db_postgres:
-    container_name: app-escola-db
+    container_name: db-escola
     image: postgres:14.15-alpine
     restart: always
     environment:
@@ -22,8 +22,21 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
-   
 
+  pgAdmin:
+    container_name: pgAdmin-escola
+    image: dpage/pgadmin4
+    depends_on:
+      - db_postgres
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=techchallengefiap@gmail.com 
+      - PGADMIN_DEFAULT_PASSWORD=pgAdmin
+    volumes:
+      - pgAdmin:/var/lib/pgAdmin
+    ports:
+      - "15432:80"
+   
 volumes:
     db_postgres:
     app:
+    pgAdmin:
