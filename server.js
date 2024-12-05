@@ -1,5 +1,5 @@
 import express from 'express'
-import postagemRoutes from './routes.js'
+import postagemRoutes from './src/routes.js'
 
 const app = express()
 

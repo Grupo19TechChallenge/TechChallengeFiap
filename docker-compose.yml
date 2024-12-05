@@ -13,16 +13,17 @@ services:
     ports: 
       - "5432:5432"
 
-  node:
+  app:
+    container_name: app-escola-node
     build: .
     depends_on:
       - db_postgres
-    container_name: app-escola-node
-    volumes:
-      - .:/src/
     ports: 
       - "3000:3000"
+    volumes:
+      - .:/app
+   
 
 volumes:
     db_postgres:
-    node:
+    app:
