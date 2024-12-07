@@ -1,3 +1,4 @@
+version: "3.8"
 
 services:
   db_postgres:
@@ -22,6 +23,12 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+    environment:
+      DB_HOST: db_postgres
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_NAME: app-escola
+    command: ["npm", "run", "dev"]
 
   pgAdmin:
     container_name: pgAdmin-escola
