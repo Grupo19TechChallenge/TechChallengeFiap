@@ -1,12 +1,13 @@
-// import express from 'express'
-// import postagemRoutes from './src/routes.js'
+import express from 'express';
+import bodyParser from 'body-parser';
+import users from './src/routes/userRoutes.js';
 
-// const app = express()
+const app = express();
+const port = 3000;
 
-// app.use(express.json())
+app.use(bodyParser.json());
+app.use('/api/users', users);
 
-// app.use('/postagem', postagemRoutes)
-
-// app.listen(3000, ()=> console.log("SERVIDOR RODANDO"))
-
-
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});

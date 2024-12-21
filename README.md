@@ -31,7 +31,7 @@ Este projeto requer o **Docker** para ser executado.
 ...
 
 
-## Como rodar o projeto com Docker
+## Como iniciar o projeto com Docker
 
 
 1 - Navegue até a pasta desejada e rode o comando abaixo no terminal para clonar o projeto:
@@ -49,6 +49,17 @@ Este projeto requer o **Docker** para ser executado.
 3 - Rode o serviço seguinte comando:
 
 `docker-compose up -d --build`
+
+4 - Inicie o servidor node:
+
+`npm run dev`
+
+Abra o seu client de backend (thunderClient, Insomnia, Postman) e teste a seguinte rota:
+
+GET http://localhost:3000/api/users
+
+Se você receber 3 usuários, seu container está acessando o banco no Docker e tudo roda bem.
+
 
 ## Começando a desenvolver
 
