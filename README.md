@@ -81,7 +81,7 @@ Agora você pode iniciar seu trabalho.
 
 # Favor não desenvolver em outra branch que não tenha sido criada por você. Isso inclui a branch Main.
 
-3 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo este pessoalmente, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
+3 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo pessoalmente o ThunderClient, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
 
 `git add .` - para adicionar todas as suas alterações no stage;
 `git commit -m 'mensagem explicando o que você fez nesse commit'`;
