@@ -46,7 +46,7 @@ Este projeto requer o **Docker** para ser executado.
 
 `npm install`
 
-3 - Rode o serviço seguinte comando:
+3 - Rode o seguinte comando:
 
 `docker-compose up -d --build`
 
