@@ -1,18 +1,24 @@
 import express from 'express';
 const router = express.Router();
+import db from '../database/database.js';
 
 import User from '../models/userModel.js';
-
 
 let users = [
    new User(1, 'Thiago S Adriano', 'tadriano@fiap.com.br')
 ];
 
-// GET: /api/users
-router.get('/', (req, res) => {
-   res.json(users);
-});
+router.get('/', async(req, res) => {
+   try {
+      const result = await db('SELECT * FROM users');
+      res.json(result);
+   } catch (err) {
+      console.error('Erro ao consultar os usuários', err);
+      res.status(500).send('Erro ao consultar os usuários');
+   }
+})
 
+// OS EXEMPLOS DAQUI PRA BAIXO NÃO UTILIZAM O BANCO DE DADOS
 // GET: /api/users/:id
 router.get('/:id', (req, res) => {
    const user = users.find(u => u.id === parseInt(req.params.id));

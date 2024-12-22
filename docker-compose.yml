@@ -11,6 +11,7 @@ services:
       POSTGRES_DB: app-escola
     volumes: 
       - db_postgres:/var/lib/postgres
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports: 
       - "5432:5432"
 
@@ -28,7 +29,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: 1234
       DB_NAME: app-escola
-    command: ["npm", "run", "dev"]
+    command: ["./wait-for-it.sh", "db_postgres", "--", "npm", "run", "dev"]
 
   pgAdmin:
     container_name: pgAdmin-escola
