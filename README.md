@@ -46,7 +46,7 @@ Este projeto requer o **Docker** para ser executado.
 
 `npm install`
 
-3 - Rode o serviço seguinte comando:
+3 - Rode o seguinte comando:
 
 `docker-compose up -d --build`
 
@@ -81,10 +81,10 @@ Agora você pode iniciar seu trabalho.
 
 # Favor não desenvolver em outra branch que não tenha sido criada por você. Isso inclui a branch Main.
 
-3 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo este pessoalmente, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
+3 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo pessoalmente o ThunderClient, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
 
-`git add .` - para adicionar todas as suas alterações no stage;
-`git commit -m 'mensagem explicando o que você fez nesse commit'`;
+`git add .` - para adicionar todas as suas alterações no stage;</br>
+`git commit -m 'mensagem explicando o que você fez nesse commit'`;</br>
 `git push origin nome-da-sua-branch`;
 
 4 - Vá até o github através do link mostrado no terminal após rodar o ultimo comando e abra um pull request apontando a base para main e o compare para o nome da sua branch.
