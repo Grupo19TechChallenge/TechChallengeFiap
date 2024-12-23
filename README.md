@@ -73,7 +73,11 @@ Você verá os nomes das branchs já criadas no projeto. A branch que você est�
 
 Aperte a tecla 'Q' para voltar para o terminal.
 
-2 - Rode o comando de criação de uma nova branch para você trabalhar:
+2 - Rode os seguintes comandos:
+`git checkout develop`;
+`git pull origin develop`;
+
+3 - Rode o comando de criação de uma nova branch para você trabalhar:
 
 `git checkout -b nome-da-sua-branch`
 
@@ -81,11 +85,11 @@ Agora você pode iniciar seu trabalho.
 
 # Favor não desenvolver em outra branch que não tenha sido criada por você. Isso inclui a branch Main.
 
-3 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo pessoalmente o ThunderClient, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
+4 - Quando você finalizar o desenvolvimento da sua primeira task e se certificar de que o endpoint está funcionando corretamente através da utilização de um client como Insomnia, Postman ou ThunderClient (recomendo pessoalmente o ThunderClient, pois se trata de uma extensão do VS Code muito fácil de configurar), rode:
 
 `git add .` - para adicionar todas as suas alterações no stage;</br>
 `git commit -m 'mensagem explicando o que você fez nesse commit'`;</br>
 `git push origin nome-da-sua-branch`;
 
-4 - Vá até o github através do link mostrado no terminal após rodar o ultimo comando e abra um pull request apontando a base para main e o compare para o nome da sua branch.
+5 - Vá até o github através do link mostrado no terminal após rodar o ultimo comando e abra um pull request apontando a base para main e o compare para o nome da sua branch.
 
