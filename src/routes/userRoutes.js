@@ -10,7 +10,7 @@ let users = [
 
 router.get('/', async(req, res) => {
    try {
-      const result = await db('SELECT * FROM users');
+      const result = await db('SELECT * FROM aluno');
       res.json(result);
    } catch (err) {
       console.error('Erro ao consultar os usuários', err);
