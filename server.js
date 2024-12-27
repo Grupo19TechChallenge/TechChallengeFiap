@@ -1,12 +1,13 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import users from './src/routes/userRoutes.js';
+import postRoute from './src/routes/post.router.js';
+import userRoute from './src/routes/user.router.js';
 
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.json());
-app.use('/api/users', users);
+app.use(express.json());
+app.use('/api/users', userRoute);
+app.use('/api/post', postRoute);
 
 app.use((err, req, res, next) => {
     console.error(err);
