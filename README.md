@@ -74,8 +74,8 @@ Você verá os nomes das branchs já criadas no projeto. A branch que você est�
 Aperte a tecla 'Q' para voltar para o terminal.
 
 2 - Rode os seguintes comandos:
-`git checkout develop`</br>
-`git pull origin develop`
+`git checkout develop`;
+`git pull origin develop`;
 
 3 - Rode o comando de criação de uma nova branch para você trabalhar:
 
@@ -93,3 +93,34 @@ Agora você pode iniciar seu trabalho.
 
 5 - Vá até o github através do link mostrado no terminal após rodar o ultimo comando e abra um pull request apontando a base para main e o compare para o nome da sua branch.
 
+## Arquitetura do projeto
+
+Este projeto utiliza a arquitetura Model-View-Controller (MVC), separando responsabilidades entre lógica de negócio, dados e apresentação.
+
+O diretório /src é o principal que contém o código fonte do projeto. O arquivo server.js inicia o servidor node e chama as rotas existentes armazenadas no diretório 'routes', que por sua vez chama os 'controllers' que é o responsável pela consulta ao banco de dados, cujas queries estão armazenadas nas 'models'.
+
+Além disso, o projeto conta com 'middlewares' que são os responsáveis pela validação da lógica de negócio.
+
+## Endpoints
+
+users: GET http://localhost:3000/api/users
+
+criação de post: POST http://localhost:3000/api/post
+
+    body: {
+    "titulo": "Nova Postagem2",
+    "subtitulo": "Conteúdo de prova",
+    "conteudo": "Lorem ipsum...", 
+    "idProfessor": "1",
+    "idDisciplina": "1",
+    "idSubdisciplina": "1"
+    }
+
+busca de posts: GET http://localhost:3000/api/post/search?term=Nova
+
+
+## Comandos úteis
+
+docker-compose down
+docker-compose up -d --build
+npm run dev
