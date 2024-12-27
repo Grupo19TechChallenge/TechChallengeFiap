@@ -116,6 +116,8 @@ criação de post: POST http://localhost:3000/api/post
     "idSubdisciplina": "1"
     }
 
+busca de posts: GET http://localhost:3000/api/post/search?term=Nova
+
 
 ## Comandos úteis
 

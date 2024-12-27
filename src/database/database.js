@@ -14,22 +14,6 @@ const pool = new Pool({
     connectionTimeoutMillis: 2000,
 });
 
-// const db = async (queryText, params) => {
-//     let retries = 5;
-//     while (retries) {
-//         try {
-//             const res = await pool.query(queryText, params);
-//             return res.rows;
-//         } catch (err) {
-//             retries -= 1;
-//             console.log('Database connection failed, retrying...', retries);
-//             if (!retries) throw err;
-//             await new Promise((res) => setTimeout(res, 5000));
-//         }
-//     }
-// };
-
-// export default db;
 export const query = async (text, params) => {
     const client = await pool.connect();
     try {
