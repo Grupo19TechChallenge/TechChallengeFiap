@@ -15,13 +15,6 @@ const pool = new Pool({
 });
 
 const db = async (queryText, params) => {
-    // try {
-    //     const res = await pool.query(queryText, params);
-    //     return res.rows;
-    // } catch (err) {
-    //     console.log('Erro ao consultar o banco de dados', err);
-    //     throw err;
-    // }
     let retries = 5;
     while (retries) {
         try {
