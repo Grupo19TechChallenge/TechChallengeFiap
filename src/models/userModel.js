@@ -1,7 +1,9 @@
-export default class User {
-    constructor(id, name, email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-}
+import { query } from "../database/database.js";
+
+const getUserModel = async() => {
+    const sql = 'SELECT * FROM aluno;';
+    const result = query(sql);
+    return result;
+};
+
+export default getUserModel;
