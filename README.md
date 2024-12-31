@@ -52,7 +52,7 @@ Este projeto requer o **Docker** para ser executado.
 
 4 - Inicie o servidor node:
 
-`npm run dev`
+`npm run dev` (se os três containers [pgAdmin-escola, app-escola-node e db-escola] ficarem up, este comando não será necessário)
 
 Abra o seu client de backend (thunderClient, Insomnia, Postman) e teste a seguinte rota:
 

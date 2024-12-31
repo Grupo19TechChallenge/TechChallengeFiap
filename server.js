@@ -1,9 +1,12 @@
 import express from 'express';
 import postRoute from './src/routes/post.router.js';
 import userRoute from './src/routes/user.router.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 
 app.use(express.json());
 app.use('/api/users', userRoute);
