@@ -20,5 +20,5 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          docker build -t $DOCKER_USERNAME/tech_challenge_fiap:latest --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} .
+          docker build -t $DOCKER_USERNAME/tech_challenge_fiap:latest --build-arg POSTGRES_URI=${{ secrets.POSTGRES_URI }} .
           docker push $DOCKER_USERNAME/tech_challenge_fiap:latest
