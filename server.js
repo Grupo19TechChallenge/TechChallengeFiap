@@ -6,7 +6,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3030;
+// const port = process.env.PORT || 3030;
+const port = 3030;
+
 
 app.use(express.json());
 app.use('/api/users', userRoute);
