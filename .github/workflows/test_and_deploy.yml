@@ -1,39 +1,48 @@
-name: Test and Deploy to Render
+name: Run Tests and Deploy
 
 on:
   push:
     branches:
       - branch-fernanda
+  pull_request:
+    branches:
+      - branch-fernanda
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      POSTGRES_URI: ${{ secrets.POSTGRES_URI }}
+    
     steps:
+      # Checkout do repositório
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      # Cache para dependências NPM
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
         with:
-          node-version: '16'
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
+      # Instalar dependências
       - name: Install dependencies
-        run: |
-          npm install
+        run: npm install
 
+      # Rodar testes com Jest
       - name: Run tests
-        run: |
-          npm test
-        continue-on-error: false
+        run: npm test
 
-  deploy_to_render:
-    runs-on: ubuntu-latest
-    needs: test  # Garante que os testes passaram
-    if: success()  # Só faz o deploy se os testes passarem
-    steps:
-      - name: Deploy to Render
+      # Condicional: Se os testes passarem, faça o deploy
+      - name: Deploy to Production
+        if: success()
         run: |
-          curl -X POST \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-          -d '{"branch":"branch-fernanda"}' \
-          https://api.render.com/deploys
+          echo "Deploying to production..."
+          # Comando para deploy com Render (exemplo)
+          render deploy --service <nome-do-serviço> --branch branch-fernanda
