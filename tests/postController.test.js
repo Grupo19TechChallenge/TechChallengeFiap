@@ -121,9 +121,6 @@ describe('POST /post', () => {
             .post('/post')
             .send(postData);
 
-            console.log('response:', response.body);
-
-
         expect(response.status).toBe(400);
         expect(response.body).toHaveProperty('message');
         expect(response.body.message).toContain('é obrigatório')

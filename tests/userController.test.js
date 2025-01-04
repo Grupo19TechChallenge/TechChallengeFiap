@@ -3,15 +3,8 @@ const express = require('express');
 const app = express();
 import userRoute from '../src/routes/user.router';
 const { getUserModel } = require('../src/models/userModel');
-// No seu arquivo de teste
-// import getUserModel from '../src/models/userModel'; // Não use chaves {} quando for default
 
-
-// jest.mock('../src/models/userModel', () => ({
-//     getUserModel: jest.fn(),
-// }));
 jest.mock('../src/models/userModel', () => ({
-    // default: jest.fn()
     getUserModel: jest.fn()
 }));
 
