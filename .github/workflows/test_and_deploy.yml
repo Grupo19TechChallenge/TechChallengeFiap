@@ -22,6 +22,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Configuração do Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'  # Substitua com a versão do Node.js que seu projeto usa
+
       # Cache para dependências NPM
       - name: Cache NPM dependencies
         uses: actions/cache@v2
@@ -31,9 +37,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-
 
-      # Instalar dependências
+      # Limpeza do cache do npm
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      # Instalar dependências com npm ci
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       # Rodar testes com Jest
       - name: Run tests
