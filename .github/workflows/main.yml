@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Test, and Deploy
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
       - branch-fernanda
 
 jobs:
-  build:
+  # Job para buildar a imagem Docker e enviar para o Docker Hub
+  build_and_push_docker:
     runs-on: ubuntu-latest
-
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
@@ -22,3 +22,40 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $DOCKER_USERNAME/tech_challenge_fiap:latest --build-arg POSTGRES_URI=${{ secrets.POSTGRES_URI }} .
           docker push $DOCKER_USERNAME/tech_challenge_fiap:latest
+
+  # Job para rodar os testes
+  test:
+    runs-on: ubuntu-latest
+    needs: build_and_push_docker  # Garante que o job de build seja concluído antes
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Run tests
+        run: |
+          npm test
+        continue-on-error: false
+
+  # # Job para deploy no Render (só se os testes passarem)
+  # deploy_to_render:
+  #   runs-on: ubuntu-latest
+  #   needs: test  # Garantir que os testes passaram antes de implantar
+  #   if: success()  # Só será executado se os testes forem bem-sucedidos
+  #   steps:
+  #     - name: Deploy to Render
+  #       run: |
+  #         # Comando para realizar o deploy no Render
+  #         # Exemplo: Use o Render CLI ou qualquer ferramenta de deploy configurada
+  #         curl -X POST \
+  #         -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+  #         -d '{"branch":"branch-fernanda"}' \
+  #         https://api.render.com/deploys
