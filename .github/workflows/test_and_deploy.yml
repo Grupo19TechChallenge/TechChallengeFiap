@@ -1,0 +1,39 @@
+name: Test and Deploy to Render
+
+on:
+  push:
+    branches:
+      - branch-fernanda
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Run tests
+        run: |
+          npm test
+        continue-on-error: false
+
+  deploy_to_render:
+    runs-on: ubuntu-latest
+    needs: test  # Garante que os testes passaram
+    if: success()  # Só faz o deploy se os testes passarem
+    steps:
+      - name: Deploy to Render
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -d '{"branch":"branch-fernanda"}' \
+          https://api.render.com/deploys
