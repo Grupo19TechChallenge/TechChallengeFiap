@@ -55,4 +55,4 @@ jobs:
         run: |
           echo "Deploying to production..."
           # Comando para deploy com Render (exemplo)
-          render deploy --service <nome-do-serviço> --branch branch-fernanda
+          render deploy --service <tech_challenge_fiap_prod> --branch branch-fernanda
