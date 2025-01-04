@@ -49,10 +49,15 @@ jobs:
       - name: Run tests
         run: npm test
 
+      # Instalar o Render CLI
+      - name: Install Render CLI
+        run: |
+          curl -fsSL https://cli.render.com/install | bash
+          echo "$HOME/.render-cli/bin" >> $GITHUB_PATH
+
       # Condicional: Se os testes passarem, faça o deploy
       - name: Deploy to Production
         if: success()
         run: |
           echo "Deploying to production..."
-          # Comando para deploy com Render (exemplo)
           render deploy --service tech_challenge_fiap_prod --branch branch-fernanda
