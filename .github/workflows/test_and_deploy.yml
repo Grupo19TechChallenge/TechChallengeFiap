@@ -26,7 +26,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Substitua com a versão do Node.js que seu projeto usa
+          node-version: '16'
 
       # Cache para dependências NPM
       - name: Cache NPM dependencies
@@ -53,8 +53,11 @@ jobs:
       - name: Install Render CLI
         run: |
           curl -fsSL https://cli.render.com/install | bash
-          export PATH="$HOME/.render-cli/bin:$PATH"
-          echo "Render CLI installed and added to PATH."
+          echo "export PATH=$HOME/.render-cli/bin:\$PATH" >> $GITHUB_ENV
+
+      # Verificar se o Render CLI foi instalado
+      - name: Verify Render CLI Installation
+        run: render --version
 
       # Condicional: Se os testes passarem, faça o deploy
       - name: Deploy to Production
