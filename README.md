@@ -5,13 +5,20 @@ Projeto desenvolvido para avaliação do curso de pós graduação de Desenvolvi
 ## Sobre o projeto
 
 <div align="justify">
-O Blogs API é uma aplicação para a produção de conteúdo para um blog onde é possível adicionar, listar e buscar  usuários, categorias e posts pelo ID. O usuário logado poderá alterar e deletar seus posts, além de deletar também a sua conta.
+O presente projeto se propões a cumprir os requisitos avaliativos descritos no documento disponibilizado pela instituição, que são:
+
+- desenvolvimento de servidor Node com Express;
+- persistência de dados com banco de dados relacional;
+- implementação de containers para subir a aplicação e orquestração dos mesmos;
+- automação através da configuração de esteira CI/CD para testes e deploy;
+- documentação técnica descrevendo a arquitetura do sistema, o uso da aplicaçaõ, setup inicial e experiências e desafios encontrados;
+- cobertura de testes de pelo menos 20% do código. 
 </div>
 
 ## Desenvolvimento 
 
 <div align="justify">
-Foi desenvolvida uma API REST e um banco de dados onde é possível realizar o CRUD (criar, ler, atualizar e deletar) das informações. A aplicação foi desenvolvida em Node.js com Express, possui middlewares que utilizam a biblioteca Joi para validação das requisições e utiliza a arquitetura MSC (Model-Service-Controller). Foi utilizado ORM Sequelize para mapeamento ao banco de dados MySQL e Json Web Token (JWT) para realizar a geração e verificação de tokens, realizando a gestão das permissões do usuário. 
+Foi desenvolvida uma API REST e um banco de dados onde é possível realizar o CRUD (criar, ler, atualizar e deletar) das informações. A aplicação foi desenvolvida em Node.js com Express, possui middlewares e utiliza a arquitetura MVC (Model-View-Controller). 
 </div>
 
 ## Tecnologias
@@ -26,10 +33,6 @@ Foi desenvolvida uma API REST e um banco de dados onde é possível realizar o C
 
 Este projeto requer o **Docker** para ser executado.
 
-### Instalando o Docker
-
-...
-
 
 ## Como iniciar o projeto com Docker
 
@@ -41,6 +44,8 @@ Este projeto requer o **Docker** para ser executado.
 2 - Entre na pasta:
 
 `cd TechChallengeFiap`
+
+3- Configure as variáveis de ambiente. Altere o arquivo .env.exemple de forma que ele contenha o valor das variáveis e renomeie para somente .env
 
 5 - Instale as dependências do projeto:
 
@@ -95,11 +100,26 @@ Agora você pode iniciar seu trabalho.
 
 ## Arquitetura do projeto
 
-Este projeto utiliza a arquitetura Model-View-Controller (MVC), separando responsabilidades entre lógica de negócio, dados e apresentação.
+Visão Geral
 
-O diretório /src é o principal que contém o código fonte do projeto. O arquivo server.js inicia o servidor node e chama as rotas existentes armazenadas no diretório 'routes', que por sua vez chama os 'controllers' que é o responsável pela consulta ao banco de dados, cujas queries estão armazenadas nas 'models'.
+A aplicação consiste em três serviços principais:
 
-Além disso, o projeto conta com 'middlewares' que são os responsáveis pela validação da lógica de negócio.
+##### db_postgres:
+
+Banco de dados PostgreSQL para armazenar dados da aplicação. Arquivo SQL de inicialização (init.sql) para criar tabelas e carregar dados iniciais.
+
+##### app:
+
+Backend desenvolvido em Node.js e utiliza o framework Express.js para APIs RESTful. Dependente do banco PostgreSQL para persistência de dados.
+
+##### pgAdmin:
+
+Interface gráfica para gerenciar o banco de dados PostgreSQL.
+
+
+## Fluxo de Dados
+
+O usuário faz uma requisição para a API (servidor node / serviço app), o serviço app consulta ou persiste dados no banco de dados PostgreSQL. O pgAdmin é usado para monitorar e gerenciar o banco de dados manualmente, se necessário.
 
 ## Endpoints
 
@@ -124,3 +144,26 @@ busca de posts: GET http://localhost:3000/api/post/search?term=Nova
 docker-compose down
 docker-compose up -d --build
 npm run dev
+
+## Configuração CI/CD com GitHub Actions
+
+Workflow de Deploy
+O arquivo test_and_deploy.yml automatiza o processo de testes e deploy. Ele executa os seguintes passos:
+
+- Faz o checkout do código.
+
+- Configura o Node.js e as dependências.
+
+- Roda os testes com Jest.
+
+- Faz o deploy para o ambiente de produção usando o Render CLI, caso os testes sejam aprovados.
+
+#### Configuração da esteira 
+Atualize os secrets no GitHub para corresponder aos valores necessários no seu ambiente.
+
+Altere o nome do serviço ou branch no comando de deploy, se necessário.
+
+### Relatos e Experiência
+
+O desenvolvimento desta fase do tech challenge foi muito interessante e enriquecedora pois pudemos nos aprofundar no conhecimento do desenvolvimento de uma api restfull.
+Nosso principal desafio foi a realização do deploy na ferramenta apresentada nas aulas do curso (render), mais específicamente a configuração do banco de dados no deploy para que conseguíssemos de fato utilizar o servidor de produção.
