@@ -145,6 +145,7 @@ docker-compose down
 docker-compose up -d --build
 npm run dev
 
+
 ## Configuração CI/CD com GitHub Actions
 
 Workflow de Deploy
