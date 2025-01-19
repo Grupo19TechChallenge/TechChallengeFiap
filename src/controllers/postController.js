@@ -43,6 +43,10 @@ const updatePostByIdController = async (req, res, next) => {
         
         const post = await updatePostByIdModel(id, titulo, subtitulo, conteudo);
 
+        if (post.length == 0) {
+            return res.status(404).json({ post })
+        }
+
         return res.status(200).json({ post })
     } catch (err) {
         res.status(422).json({ message: `erro: ${err.message}`});
@@ -54,6 +58,10 @@ const deletePostByIdController = async (req, res, next) => {
         const id = req.params.id;
         
         const post = await deletePostByIdModel(id);
+
+        if (post.length == 0) {
+            return res.status(404).json({ post })
+        }
 
         return res.status(200).json({ post })
     } catch (err) {
