@@ -140,6 +140,17 @@ criação de post: POST http://localhost:3000/api/post
 
 busca de posts: GET http://localhost:3000/api/post/search?term=Nova
 
+leitura de post: GET http://localhost:3000/api/post/1
+
+edição do post: PUT http://localhost:3000/api/post/1
+
+    {
+    "titulo" : "Nova Postagem alterada",
+    "subtitulo" : "Conteúdo complementar",
+    "conteudo" : "Lorem ipsum alterado..."
+    }
+
+exclusão do post: DELETE http://localhost:3000/api/post/6
 
 ## Comandos úteis
 
