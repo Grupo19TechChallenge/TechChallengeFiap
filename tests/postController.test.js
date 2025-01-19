@@ -2,13 +2,15 @@ const request = require('supertest');
 const express = require('express');
 const app = express();
 import postRoute from '../src/routes/post.router';
-const { createPostModel, searchPostModel } = require('../src/models/postModel'); 
+const { createPostModel, searchPostModel, searchPostByIdMode, updatePostByIdModel, deletePostByIdModel } = require('../src/models/postModel'); 
 
 
 // Mock da função createPostModel
 jest.mock('../src/models/postModel', () => ({
     createPostModel: jest.fn(),
-    searchPostModel: jest.fn()
+    searchPostModel: jest.fn(),
+    updatePostByIdModel: jest.fn(),
+    deletePostByIdModel: jest.fn()
 }));
 
 
@@ -218,3 +220,206 @@ describe('GET /post/search', () => {
         expect(responseEmpty.body.post).not.toEqual(mockPostList);  
     })
 })
+
+describe('PUT /post/:id', () => {
+    
+    // Teste de sucesso
+    it('Deve editar um o post e retornar status 200', async () => {
+        
+        const mockNewPost = {
+            id_postagem: 1,
+            titulo: "Post edição título",
+            subtitulo: "Post edição Subtítulo",
+            conteudo: "Post edição Conteúdo",
+            id_professor: 1,
+            id_disciplina: 1,
+            id_subdisciplina: 1,
+        };
+
+        const mockNewPostFailed = {
+            id_postagem: 1,
+            titulo: "Post edição título",
+            subtitulo: "Post edição Subtítulo",
+            conteudo: "Post edição Conteúdo",
+            id_professor: 1,
+            id_disciplina: 1,
+            //id_subdisciplina: 1,
+        };
+
+        const postData = {
+            "id_postagem" : "1",
+            "titulo" : "Post edição título",
+            "subtitulo" : "Post edição Subtítulo",
+            "conteudo" : "Post edição Conteúdo",
+        };
+
+        updatePostByIdModel.mockResolvedValue(mockNewPost);
+
+        // Act: Faça a requisição PUT
+        const response = await 
+            request(app)
+                .put('/post/1')
+                .send(postData);
+
+        expect(updatePostByIdModel).toHaveBeenCalledTimes(1);
+        expect(updatePostByIdModel).toHaveBeenCalledWith(
+            postData.id_postagem,
+            postData.titulo,
+            postData.subtitulo,
+            postData.conteudo,
+        );
+
+        // Assert: Verifique se a resposta foi correta
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('post');
+        expect(response.body.post).toEqual(mockNewPost);
+        expect(response.body.post).not.toEqual(mockNewPostFailed);
+    
+    });
+
+    // Teste de falha
+    it('Deve retornar status 422 caso apresentar erro na edição da postagem', async () => {
+        // Arrange: Simule um erro no modelo
+        updatePostByIdModel.mockRejectedValue(new Error('"message": "erro: relation \"postagem\" does not exist"'));
+        
+        const mockNewPostFailed = {
+            id_postagem: 1,
+            titulo: "Post edição título",
+            subtitulo: "Post edição Subtítulo",
+            conteudo: "Post edição Conteúdo",
+            id_professor: 1,
+            id_disciplina: 1,
+            id_subdisciplina: 1,
+        };
+
+        const postData = {
+            "id_postagem" : "999",
+            "titulo" : "Post edição título",
+            "subtitulo" : "Post edição Subtítulo",
+            "conteudo" : "Post edição Conteúdo",
+        };
+
+        // Act: Faça a requisição PUT
+        const response = await request(app)
+            .put('/post/999')
+            .send(postData);
+
+        expect(updatePostByIdModel).toHaveBeenCalledTimes(1);
+        expect(updatePostByIdModel).toHaveBeenCalledWith(
+            postData.id_postagem,
+            postData.titulo,
+            postData.subtitulo,
+            postData.conteudo,
+        );
+
+        // Assert: Verifique se a resposta foi de erro
+        expect(response.status).toBe(422);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.post).not.toEqual(mockNewPostFailed);
+    });
+
+    // Teste de falha
+    it('Deve retornar 400 em  caso de faltar algum parâmetro obrigatório no corpo da requisição', async () => {
+        updatePostByIdModel.mockRejectedValue(new Error('Faltando parâmetro obrigatório'));
+        
+        const postData = {
+            subtitulo: 'Subtítulo edição post',
+            conteudo: 'Conteúdo edição post',
+        };
+
+        const response = await request(app)
+            .put('/post/3')
+            .send(postData);
+
+        expect(response.status).toBe(400);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.message).toContain('é obrigatório')
+
+    })
+});
+
+describe('DELETE /post/:id', () => {
+    
+    // Teste de sucesso
+    it('Deve deletar o post e retornar status 200', async () => {
+        
+        const mockNewPost = {
+            id_postagem: 3,
+            titulo: "Post edição título",
+            subtitulo: "Post edição Subtítulo",
+            conteudo: "Post edição Conteúdo",
+            id_professor: 1,
+            id_disciplina: 1,
+            id_subdisciplina: 1,
+        };
+
+        const mockNewPostFailed = {
+            id_postagem: 5,
+            titulo: "Post edição título 5",
+            subtitulo: "Post edição Subtítulo 5",
+            conteudo: "Post edição Conteúdo 5",
+            id_professor: 1,
+            id_disciplina: 1,
+            id_subdisciplina: 2,
+        };
+
+        const postData = {
+            "id_postagem" : "3"
+        };
+
+        deletePostByIdModel.mockResolvedValue(mockNewPost);
+
+        // Act: Faça a requisição DELETE
+        const response = await 
+            request(app)
+                .delete('/post/3')
+                .send(postData);
+
+        expect(deletePostByIdModel).toHaveBeenCalledTimes(1);
+        expect(deletePostByIdModel).toHaveBeenCalledWith(
+            postData.id_postagem
+        );
+
+        // Assert: Verifique se a resposta foi correta
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty('post');
+        expect(response.body.post).toEqual(mockNewPost);
+        expect(response.body.post).not.toEqual(mockNewPostFailed);
+    
+    });
+
+    // Teste de falha
+    it('Deve retornar status 422 caso apresentar erro na edição da postagem', async () => {
+        // Arrange: Simule um erro no modelo
+        deletePostByIdModel.mockRejectedValue(new Error('"message": "erro: relation \"postagem\" does not exist"'));
+        
+        const mockNewPostFailed = {
+            id_postagem: 100,
+            titulo: "Post edição título",
+            subtitulo: "Post edição Subtítulo",
+            conteudo: "Post edição Conteúdo",
+            id_professor: 1,
+            id_disciplina: 1,
+            id_subdisciplina: 1,
+        };
+
+        const postData = {
+            "id_postagem" : "100"
+        };
+
+        // Act: Faça a requisição DELETE
+        const response = await request(app)
+            .delete('/post/100')
+            .send(postData);
+
+        expect(deletePostByIdModel).toHaveBeenCalledTimes(1);
+        expect(deletePostByIdModel).toHaveBeenCalledWith(
+            postData.id_postagem
+        );
+
+        // Assert: Verifique se a resposta foi de erro
+        expect(response.status).toBe(422);
+        expect(response.body).toHaveProperty('message');
+        expect(response.body.post).not.toEqual(mockNewPostFailed);
+    });
+});
