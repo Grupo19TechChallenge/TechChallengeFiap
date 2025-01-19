@@ -1,0 +1,68 @@
+name: Run Tests and Deploy
+
+on:
+  push:
+    branches:
+      - branch-fernanda
+  pull_request:
+    branches:
+      - branch-fernanda
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      POSTGRES_URI: ${{ secrets.POSTGRES_URI }}
+    
+    steps:
+      # Checkout do repositório
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Configuração do Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      # Cache para dependências NPM
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      # Limpeza do cache do npm
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      # Instalar dependências com npm ci
+      - name: Install dependencies
+        run: npm ci
+
+      # Rodar testes com Jest
+      - name: Run tests
+        run: npm test
+
+      # Instalar o Render CLI
+      - name: Install Render CLI
+        run: |
+          curl -fsSL https://cli.render.com/install | bash
+          echo "$HOME/.render-cli/bin" >> $GITHUB_PATH
+          echo "PATH=$HOME/.render-cli/bin:$PATH" >> $GITHUB_ENV
+
+      # Verificar se o Render CLI foi instalado
+      - name: Verify Render CLI Installation
+        run: render --version
+
+      # Condicional: Se os testes passarem, faça o deploy
+      - name: Deploy to Production
+        if: success()
+        run: |
+          echo "Deploying to production..."
+          render deploy --service tech_challenge_fiap_prod --branch branch-fernanda

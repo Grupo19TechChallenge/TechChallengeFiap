@@ -1,3 +1,4 @@
+version: "3.8"
 
 services:
   db_postgres:
@@ -9,7 +10,8 @@ services:
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: app-escola
     volumes: 
-      - db_postgres:/var/lib/postgres
+      - db_postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports: 
       - "5432:5432"
 
@@ -22,6 +24,12 @@ services:
       - "3000:3000"
     volumes:
       - .:/app
+    environment:
+      DB_HOST: db_postgres
+      DB_USER: postgres
+      DB_PASSWORD: 1234
+      DB_NAME: app-escola
+    command: ["sh", "./wait-for-it.sh", "db_postgres", "--", "npm", "run", "dev"]
 
   pgAdmin:
     container_name: pgAdmin-escola
@@ -29,8 +37,8 @@ services:
     depends_on:
       - db_postgres
     environment:
-      - PGADMIN_DEFAULT_EMAIL=techchallengefiap@gmail.com 
-      - PGADMIN_DEFAULT_PASSWORD=pgAdmin
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     volumes:
       - pgAdmin:/var/lib/pgAdmin
     ports:
@@ -38,5 +46,4 @@ services:
    
 volumes:
     db_postgres:
-    app:
     pgAdmin:
