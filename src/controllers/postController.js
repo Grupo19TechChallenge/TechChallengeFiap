@@ -1,4 +1,4 @@
-import { createPostModel, searchPostModel } from "../models/postModel.js";
+import { createPostModel, searchPostModel, searchPostByIdModel, updatePostByIdModel, deletePostByIdModel } from "../models/postModel.js";
 
 const createPostController = async (req, res, next) => {
     try {
@@ -24,4 +24,41 @@ const searchPostController = async (req, res, next) => {
     }
 }
 
-export default { createPostController, searchPostController };
+const searchPostByIdController = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        
+        const post = await searchPostByIdModel(id);
+
+        return res.status(200).json({ post })
+    } catch (err) {
+        res.status(422).json({ message: `erro: ${err.message}`});
+    }
+}
+
+const updatePostByIdController = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const { titulo, subtitulo, conteudo } = req.body;
+        
+        const post = await updatePostByIdModel(id, titulo, subtitulo, conteudo);
+
+        return res.status(200).json({ post })
+    } catch (err) {
+        res.status(422).json({ message: `erro: ${err.message}`});
+    }
+}
+
+const deletePostByIdController = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        
+        const post = await deletePostByIdModel(id);
+
+        return res.status(200).json({ post })
+    } catch (err) {
+        res.status(422).json({ message: `erro: ${err.message}`});
+    }
+}
+
+export default { createPostController, searchPostController, searchPostByIdController, updatePostByIdController, deletePostByIdController };
